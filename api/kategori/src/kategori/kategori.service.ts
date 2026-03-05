@@ -1,35 +1,14 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma.service';
 import { CreateKategoriDto } from './dto/create-kategori.dto';
 import { UpdateKategoriDto } from './dto/update-kategori.dto';
-import { PrismaService } from '../prisma.service';
-
-type KategoriRow = {
-  id: number;
-  nama: string;
-};
-
-type KategoriStore = {
-  create(args: { data: { nama: string } }): Promise<KategoriRow>;
-  findMany(): Promise<KategoriRow[]>;
-  findUnique(args: { where: { id: number } }): Promise<KategoriRow | null>;
-  update(args: {
-    where: { id: number };
-    data: { nama?: string };
-  }): Promise<KategoriRow>;
-  delete(args: { where: { id: number } }): Promise<KategoriRow>;
-};
 
 @Injectable()
 export class KategoriService {
-  // buat constructor untuk prisma service
   constructor(private readonly prisma: PrismaService) {}
 
-  private get kategori(): KategoriStore {
-    return (this.prisma as unknown as { kategori: KategoriStore }).kategori;
-  }
-
   async create(createKategoriDto: CreateKategoriDto) {
-    const data = await this.kategori.create({
+    const data = await this.prisma.kategori.create({
       data: {
         nama: createKategoriDto.nama,
       },
@@ -45,11 +24,9 @@ export class KategoriService {
     };
   }
 
-  // tampilkan seluruh data kategori
   async findAll() {
-    // return this action returns all kategori
-    // tampilkan data kategori
-    const data = await this.kategori.findMany();
+    const data = await this.prisma.kategori.findMany();
+
     return {
       success: true,
       message: '',
@@ -57,12 +34,12 @@ export class KategoriService {
         status: 200,
         total_data: data.length,
       },
-      data: data,
+      data,
     };
   }
 
   async findOne(id: number) {
-    const data = await this.kategori.findUnique({
+    const data = await this.prisma.kategori.findUnique({
       where: { id },
     });
 
@@ -77,7 +54,7 @@ export class KategoriService {
   }
 
   async update(id: number, updateKategoriDto: UpdateKategoriDto) {
-    const data = await this.kategori.update({
+    const data = await this.prisma.kategori.update({
       where: { id },
       data: {
         nama: updateKategoriDto.nama,
@@ -95,7 +72,7 @@ export class KategoriService {
   }
 
   async remove(id: number) {
-    const data = await this.kategori.delete({
+    const data = await this.prisma.kategori.delete({
       where: { id },
     });
 

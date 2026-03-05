@@ -15,8 +15,8 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
-    it('should return "Hello Dunia!"', () => {
-      expect(appController.getWelcome()).toBe('Hello Dunia!');
+    it('should return welcome message', () => {
+      expect(appController.getWelcome()).toBe('Selamat Datang, Kembali');
     });
   });
 });
