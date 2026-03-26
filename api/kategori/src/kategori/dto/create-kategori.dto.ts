@@ -1,3 +1,3 @@
 export class CreateKategoriDto {
-  nama!: string;
+  nama: string;
 }
