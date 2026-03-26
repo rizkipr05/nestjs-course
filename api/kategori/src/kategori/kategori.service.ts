@@ -112,6 +112,15 @@ export class KategoriService {
 
   async findOne(id: number) {
     // return `This action returns a #${id} kategori`;
+    if (Number.isNaN(id)) {
+      throw new BadRequestException({
+        success: false,
+        message: 'Parameter/Slug id harus angka!',
+        metadata: {
+          status: HttpStatus.BAD_REQUEST,
+        },
+      });
+    }
 
     // tampilkan data kategori berdasarkan id
     const data = await this.prisma.kategori.findUnique({
@@ -128,6 +137,7 @@ export class KategoriService {
         },
       });
     }
+
     //  jika data kategori ditemukan
     return {
       success: true,
